@@ -1,0 +1,58 @@
+{% extends "photos/base.html" %}
+
+{% block titulo %}
+    {{photo.name}}
+{% endblock titulo %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-4 margin-top">
+                {% include "photos/photo_thumbnail.html" with photo=photo %}
+            </div>
+            <div class="col-xs-12 col-md-8">
+                <h2>
+                    <span class="label {% if photo.popularity > 0 %} label-success {% else %} label-danger{% endif %}">{{photo.popularity}}</span>
+                    <span class="margin-left">{{photo.name}}</span>
+                    {% if user == photo.owner %}
+                        <form action="{% url 'delete_photo' photo.pk %}" method="POST" class='inline-block margin-left'>
+                            {% csrf_token %}
+                            <input type="submit" value="Eliminar" class='btn btn-default'>
+                        </form>
+                    {% endif %}
+                </h2>
+                <h4 class='color-darkGrey'>{{photo.pub_date | date:"d/m/Y"}}</h4>
+                <h3 >{{photo.owner}}</h3>
+                <hr class='no-margin-bottom'>
+                <div class='row'>
+                    <div class="col-xs-12 col-md-8">
+                        <h3 class='padding-left-05'> {% with comments=photo.comments.count %}
+                            {{ comments }} comment{{ comments|pluralize }}
+                        </h3> {% endwith %}
+                        {% for comment in photo.comments.all %}
+                            <div class="panel panel-default">
+                                <div class="panel-body padding-bottom padding-top-05">
+                                    <h4 class='padding-left-05 border-bottom no-margin-top'><a href="{% url 'profile' comment.user.pk %}">{{ comment.user.username }}</a></h4>
+                                    <p class='padding-left-05 no-margin-bottom'>{{ comment.text }}</p>
+                                </div>
+                                <div class="panel-footer padding-top-bottom-05">
+                                    <p class='no-margin-bottom padding-left-05'>
+                                    {{comment.pub_date | date:'d/m/Y'}} a las {{comment.pub_date | date:'h:m'}}
+                                    </p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="col-xs-12 col-md-4">
+                        <h3>Add new comment</h3>
+                        <form action="" method="POST" class=''>
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <input type="submit" value="Comment" class='btn btn-primary'>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

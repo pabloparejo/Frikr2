@@ -1,0 +1,36 @@
+{% extends "photos/base.html" %}
+
+{% block titulo %}
+
+{% endblock titulo %}
+
+{% block content %}
+    <div class="container">
+        <div class="col-xs-12 col-md-6 col-md-offset-3 center">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4>
+                        {% block form_title %}
+
+                        {% endblock form_title %}
+                    </h4>
+                </div>
+                <div class="panel-body">
+                    {% if error %}
+                        <p style="color:red">{{error}}</p>
+                    {% endif %}
+                    <form action="" method="POST" class=''>
+                        {% csrf_token %}
+                        {{ form.as_p }}
+
+                        {% block form_button %}
+
+                        {% endblock form_button %}
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+

@@ -1,0 +1,21 @@
+{% extends "photos/base.html" %}
+
+{% block titulo %}
+    Frikr | Usuarios
+{% endblock titulo %}
+
+{% block content %}
+    <div class="container">
+        <div class="row text-center">
+            {% if object_list %}
+                {% include "users/users_block.html" with users=object_list %}
+            {% else %}
+                <div class="panel panel-default inline-block">
+                    <div class="panel-body">
+                        No se encontraron usuarios
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock content %}

@@ -1,0 +1,39 @@
+{% extends "photos/base.html" %}
+
+{% block content %}
+    <div class="container">
+        <h2>Frikr search</h2>
+
+        <div>
+            <h4>Found {{ users | length }} users:</h4>
+            <hr/>
+            <div class="row">
+                {% if photos %}
+                    {% include "users/users_block.html" with users=users %}
+                {% else %}
+                    <div class="panel panel-default">
+                      <div class="panel-body">
+                        No se encontró ningún yuser
+                      </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        <div>
+            <h4>Found {{ photos | length }} photos:</h4>
+            <hr/>
+            <div class="row">
+                {% if photos %}
+                    {% include "photos/photos_block.html" %}
+                {% else %}
+                    <div class="panel panel-default">
+                      <div class="panel-body">
+                        No se encontró ninguna foto
+                      </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% include "photos/photos_block.html" with photos=object_list %}
+{% endblock content %}

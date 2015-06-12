@@ -1,0 +1,46 @@
+{% load staticfiles %}
+{% for user in users %}
+    <div class="col-sm-6 col-md-3 col-lg-2 ">
+        <div class="thumbnail">
+            <h3 class='text-center'>
+                <a href="{% url 'profile' user.pk %}">{{user.username}}</a>
+            </h3>
+            <a href="{% url 'profile' user.pk %}">
+                {% if user.profile %}
+                    <img src="{{user.profile.photo.url}}" class='img-circle' alt="{{user.username}}">
+                {% else %}
+                    <img src="{% static 'img/default.jpg' %}" class='img-circle' alt="{{user.username}}">
+                {% endif %}
+            </a>
+            <div class="caption clearfix">
+                <div class="col-xs-12">
+
+                    <h4 class='text-center'>
+                        {% with followers=user.profile.followers.count %}
+                            {{ followers }} follower{{ followers|pluralize }}
+                        {% endwith %}
+                    </h4>
+                    <p>
+                        <div>
+                            {% if request.user.profile in user.profile.followers.all %}
+                                <a  href="{% url 'follow_toggle' 'unfollow' user.profile.pk %}?next={{request.path}}"
+                                    class="btn btn-block btn-primary">
+                                    <span class="glyphicon glyphicon-ok"></span>
+                                    Following
+                                </a>
+                            {% else %}
+                                <a  href="{% url 'follow_toggle' 'follow' user.profile.pk %}?next={{request.path}}"
+                                    class="btn btn-block btn-default">
+                                    Follow
+                                </a>
+                            {% endif %}
+                        </div>
+                        <div class="clearfix"></div>
+                    </p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endfor %}

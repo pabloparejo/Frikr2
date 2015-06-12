@@ -1,0 +1,32 @@
+<div class="thumbnail">
+    <a href="{% url 'photo_detail' photo.pk %}">
+        <img src="{{photo.url}}" alt="{{photo.name}}">
+    </a>
+    <div class="caption">
+        {% if not detail %}
+            <h3>{{photo.name}}</h3>
+            <p>{{photo.pub_date | date:'d/m/Y'}}</p>
+            <p>Usuario: <a href="{% url 'profile' photo.owner.pk %}">{{photo.owner}}</a></p>
+            <p>Karma:
+                <span class="label {% if photo.popularity > 0 %} label-success {% else %} label-danger{% endif %}">
+                        {{photo.popularity}}
+                </span>
+            </p>
+        {% endif %}
+        <div class='clearfix row'>
+            <p class="col-xs-12 col-md-6 no-margin-bottom">
+                <a href="{% url 'vote' photo.pk 1 %}?next={{request.path}}" class="btn btn-block btn-primary" role="button">
+                    <span class="glyphicon glyphicon-heart"></span>
+                    Like
+                </a>
+            </p>
+            <p class="col-xs-12 col-md-6 no-margin-bottom">
+                <a href="{% url 'vote' photo.pk -1 %}?next={{request.path}}" class="btn btn-block btn-default" role="button">
+                    <span class="glyphicon glyphicon-remove"></span>
+                    Dislike
+                </a>
+            </p>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>

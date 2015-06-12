@@ -1,0 +1,9 @@
+{% extends "photos/base.html" %}
+
+{% block content %}
+    <div class="container">
+        <h1>Frikr</h1>
+        <hr/>
+    </div>
+    {% include "photos/photos_block.html" with photos=object_list %}
+{% endblock content %}

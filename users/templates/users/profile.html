@@ -1,0 +1,93 @@
+{% extends "photos/base.html" %}
+{% load staticfiles %}
+
+{% block titulo %}
+    Frikr Profile
+{% endblock titulo %}
+
+{% block content %}
+    <div class='container'>
+        <div class="row">
+            <div class="col-xs-12 col-md-4 col-lg-2">
+                {% if user.profile %}
+                    <img class='img-circle img-responsive' src="{{user.profile.photo.url}}" alt="{{user.username}}">
+                {% else %}
+                    <img class='img-circle img-responsive' src="{% static 'img/default.jpg' %}" alt="{{user.username}}">
+                {% endif %}
+
+                {% if not self_profile %}
+                    <br/>
+                    <p>
+                    {% if request.user.profile in user.profile.followers.all %}
+                        <a  href="{% url 'follow_toggle' 'unfollow' user.profile.pk %}?next={{request.path}}"
+                            class="btn btn-block btn-primary">
+                            <span class="glyphicon glyphicon-ok"></span>
+                            Following
+                        </a>
+                    {% else %}
+                        <a  href="{% url 'follow_toggle' 'follow' user.profile.pk %}?next={{request.path}}"
+                            class="btn btn-block btn-default">
+                            Follow
+                        </a>
+                    {% endif %}
+                    </p>
+                {% endif %}
+            </div>
+            <div class="col-xs-12 col-md-4 col-lg-6">
+                <h1>{{user.username}}</h1>
+                <p class='color-darkGrey'>{{user.first_name}} {{user.last_name}} | <strong>Email:</strong> {{user.email}}</p>
+                <a href="{% url 'follow_list_display' 'following' user.profile.pk %}">
+                    <div class="panel panel-default inline-block">
+                      <div class="panel-heading">Following</div>
+                      <div class="panel-body text-center">
+                        <p class="no-margin-bottom">
+                            <strong>{{user.profile.following.count}}</strong>
+                        </p>
+                      </div>
+                    </div>
+                </a>
+                <a href="{% url 'follow_list_display' 'followers' user.profile.pk %}">
+                    <div class="panel panel-default inline-block margin-left">
+                      <div class="panel-heading">Followers</div>
+                      <div class="panel-body text-center">
+                        <p class="no-margin-bottom">
+                            <strong>{{user.profile.followers.count}}</strong>
+                        </p>
+                      </div>
+                    </div>
+                </a>
+            </div>
+            {% if self_profile %}
+                <div class="col-xs-12 col-md-4 col-lg-4">
+                    <div class="container">
+                        <br>
+                        <form action="" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <input type="submit" class='btn btn-primary' value="Editar Foto">
+                        </form>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        <hr/>
+        {% if self_profile %}
+            <h2>Mis fotos</h2>
+        {% else %}
+            <h2>Fotos</h2>
+        {% endif %}
+        <div class="row">
+
+            {% if photos %}
+                {% include "photos/photos_block.html" %}
+            {% else %}
+                <div class="panel panel-default">
+                  <div class="panel-body">
+                    Este usuario no ha cargado ninguna foto todavía
+                  </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock content %}
